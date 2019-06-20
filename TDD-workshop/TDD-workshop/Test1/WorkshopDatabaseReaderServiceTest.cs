@@ -10,14 +10,14 @@ namespace Tests
 {
     public class WorkshopDatabaseReaderServiceTest
     {
-        public class TheReadAllMethod
+        public class TheReadAllSortedMethod
         {
             #region Specification
             /* Specification: Read all entries from the database. */
             #endregion
 
             [Test]
-            public void ReadsAllEntriesFromDatabase()
+            public void ReadsAllEntriesFromDatabaseSorted()
             {
                 #region Step1
                 /* Create a service for reading a database */
@@ -27,17 +27,18 @@ namespace Tests
                 #region Step3
                 /* Mock the database entries and have the test pass */
                 var databaseMock = new Mock<IWorkshopDatabase>();
+                var jelicaEntry = new WorkshopDatabaseEntry() { Name = "Jelica", LastName = "Kapetina" };
+                var aleksandarEntry = new WorkshopDatabaseEntry() { Name = "Aleksandar", LastName = "Kahriman" };
                 databaseMock.Setup(workshopDatabase => workshopDatabase.DatabaseEntries).Returns(
-                    new List<WorkshopDatabaseEntry>() {
-                        new WorkshopDatabaseEntry() { Name = "Aleksandar", LastName = "Kahriman" },
-                        new WorkshopDatabaseEntry() { Name = "Jelica", LastName = "Kapetina" } });
+                        new List<WorkshopDatabaseEntry>() { jelicaEntry, aleksandarEntry });
                 workshopDatabaseReaderService.WorkshopDatabase = databaseMock.Object;
                 #endregion
 
                 #region Step2
                 /* Invoke a method, and assert the result */
-                var results = workshopDatabaseReaderService.ReadAll().ToList();
-                Assert.IsTrue(results.Count >  0);
+                var results = workshopDatabaseReaderService.ReadAllSorted().ToList();
+                Assert.IsTrue(results != null);
+                Assert.IsTrue(results[0] == aleksandarEntry);
                 #endregion
             }
         }

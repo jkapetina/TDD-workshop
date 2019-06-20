@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TDDWorkshop.Interfaces;
 using TDDWorkshop.Models;
 
@@ -8,10 +9,10 @@ namespace TDDWorkshop.Services
     {
         public IWorkshopDatabase WorkshopDatabase { get; set; }
 
-        public IEnumerable<WorkshopDatabaseEntry> ReadAll()
+        public IEnumerable<WorkshopDatabaseEntry> ReadAllSorted()
         {
             // throw new NotImplementedException();
-            return WorkshopDatabase.DatabaseEntries;
+            return WorkshopDatabase.DatabaseEntries.ToList().OrderBy(entry => entry.Name).ThenBy(entry => entry.LastName);
         }
     }
 }
